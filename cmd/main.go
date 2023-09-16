@@ -2,22 +2,40 @@ package main
 
 import (
 	"fmt"
+	"os"
 )
 
 func main() {
-	a := []uint{
-		0x31,
-		0x14,
-		0xe0,
-		0xd4,
+	if len(os.Args) < 1 {
+		panic("Must supply a file name")
 	}
 
-	for _, x := range a {
-		fmt.Println(getInstrLen(x))
+	f, err := os.Open(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
+
+	b := make([]byte, 1)
+	for {
+		if _, err := f.Read(b); err != nil {
+			break
+		}
+
+		l := getInstrLen(b[0])
+		if l < 2 {
+			fmt.Printf("[% x]\n", b)
+		} else {
+			k := make([]byte, l-1)
+			f.Read(k)
+			t := make([]byte, 0)
+			t = append(t, b...)
+			t = append(t, k...)
+			fmt.Printf("[% x]\n", t)
+		}
 	}
 }
 
-func getInstrLen(i uint) uint {
+func getInstrLen(i byte) byte {
 	if i < 0x40 {
 		// Upper table
 		l := i & 0x0f
