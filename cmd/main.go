@@ -25,9 +25,14 @@ func main() {
 		if l < 2 {
 			fmt.Printf("[% x]\n", b)
 		} else {
+
 			k := make([]byte, l-1)
-			f.Read(k)
-			t := make([]byte, 0)
+
+			if count, _ := f.Read(k); count < int(l-1) {
+				k = k[:count]
+			}
+
+			var t []byte
 			t = append(t, b...)
 			t = append(t, k...)
 			fmt.Printf("[% x]\n", t)
