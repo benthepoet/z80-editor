@@ -19,7 +19,6 @@ func main() {
 
 	for {
 		b := make([]byte, 1)
-
 		if _, err := f.Read(b); err != nil {
 			break
 		}
@@ -56,12 +55,16 @@ func getInstrLen(op byte) byte {
 		// Middle table
 		return 1
 	} else if op == 0xcb {
-		return 0
+		// Bit table
+		return 2
 	} else if op == 0xdd {
+		// IX table
 		return 0
 	} else if op == 0xed {
+		// Misc table
 		return 0
 	} else if op == 0xfd {
+		// IY table
 		return 0
 	}
 	// Bottom table
