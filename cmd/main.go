@@ -15,28 +15,25 @@ func main() {
 		panic(err)
 	}
 
-	b := make([]byte, 1)
 	for {
+		b := make([]byte, 1)
+
 		if _, err := f.Read(b); err != nil {
 			break
 		}
 
 		l := getInstrLen(b[0])
-		if l < 2 {
-			fmt.Printf("[% x]\n", b)
-		} else {
-
+		if l > 1 {
 			k := make([]byte, l-1)
 
-			if count, _ := f.Read(k); count < int(l-1) {
+			if count, _ := f.Read(k); count < int(l-1) && count > 0 {
 				k = k[:count]
 			}
 
-			var t []byte
-			t = append(t, b...)
-			t = append(t, k...)
-			fmt.Printf("[% x]\n", t)
+			b = append(b, k...)
 		}
+
+		fmt.Printf("[% x]\n", b)
 	}
 }
 
