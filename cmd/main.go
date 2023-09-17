@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 const missing_file = "Filename was not supplied"
@@ -36,6 +37,25 @@ func main() {
 
 		fmt.Printf("[% x]\n", b)
 	}
+}
+
+func formatLine(l string) string {
+	var s strings.Builder
+	k := len(l)
+	for i := 0; i < k; i++ {
+		a := l[i]
+		s.WriteByte(a)
+
+		j := i + 1
+		if j < k {
+			b := l[j]
+
+			if (a != ' ' && (b >= '(' && b <= '+')) || ((a >= '(' && a <= '+') && b != ' ') {
+				s.WriteByte(' ')
+			}
+		}
+	}
+	return s.String()
 }
 
 func getInstrLen(op byte) byte {
